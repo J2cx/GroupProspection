@@ -1,0 +1,9 @@
+syntax: glob
+
+./build/*
+./dist/*
+
+./*/build/*
+./*/dist/*
+
+[Tt]humbs.db
