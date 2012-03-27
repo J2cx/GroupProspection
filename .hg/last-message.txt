@@ -1,1 +1,4 @@
-test commit 
+commit
+1, sql can return ArrayList for table and ArrayList for one column;
+but it is not the container.
+2, Server on local. sqljdbc lib on local.
