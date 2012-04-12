@@ -3,6 +3,8 @@ package com.example.vaadin;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.data.util.QueryContainer;
+import com.vaadin.ui.Table;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -214,38 +216,23 @@ public class SQL {
         return list;
     }
     
-    /* return a container for table*/
-    /*public static void ContainerArr(String strSQL) {
-        Statement stmt;
-        ResultSet rs;
-        ArrayList list = new ArrayList<HashMap>();
-        int columnCount;
-        
-        Container container;
-        
+    /*return a container for datasource*/
+    /*
+     * an example:
+     *  Table t = new Table();
+        t.setContainerDataSource(SQL.Container("select id, mail, nom from Prospecteurs"));
+     */
+    public static QueryContainer Container(String strSQL) {
+        QueryContainer qcSQL = null;
 
         try {
-            stmt = getConnection().createStatement();
-            stmt.executeQuery(strSQL);
-            System.out.println(strSQL);
-
-            rs = stmt.getResultSet();
-            ResultSetMetaData md = rs.getMetaData();
-            columnCount = md.getColumnCount();
-            while (rs.next()) {
-                HashMap row = new HashMap(columnCount);
-                for (int i = 1; i <= columnCount; ++i) {
-                    row.put(md.getColumnName(i), rs.getObject(i));
-                }
-                BeanItem item=new BeanItem(row);
-                list.add(row);
-            }
-            rs.close();
-            stmt.close();
+            qcSQL= new QueryContainer(strSQL,getConnection());
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }*/
+        return qcSQL;
+    }
+      
 
     /* returns a vector ( 1 column recordset -> vector ) */
     /*
@@ -274,5 +261,5 @@ public class SQL {
         }
         return list;
     }
-    
+      
 }

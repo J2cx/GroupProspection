@@ -1,0 +1,28 @@
+/* 
+    Document   : styles
+    Created on : 27 mars 2012, 15:53:12
+    Author     : weizhe.jiao
+    Description:
+        Purpose of the stylesheet follows.
+*/
+@import "../runo/styles.css";
+
+root { 
+    display: block;
+}
+
+.titreDirect{
+    position: fixed;
+    top:30%;
+    left: 40%;
+    font-size: 250%;
+}
+
+.loginForm{
+    position: fixed;
+    top: 40%;
+    left: 40%;
+}
+.v-textfield{ 
+    width: 16em;
+} 

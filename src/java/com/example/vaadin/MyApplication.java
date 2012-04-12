@@ -3,72 +3,62 @@
  *
  * Created on 23 mars 2012, 17:15
  */
- 
-package com.example.vaadin;           
+package com.example.vaadin;
 
 import com.vaadin.Application;
-import com.vaadin.ui.*;
-import com.vaadin.data.*;
-import com.vaadin.data.util.BeanItemContainer;
-import java.sql.Array;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import com.vaadin.ui.Label;
+import com.vaadin.ui.LoginForm;
+import com.vaadin.ui.LoginForm.LoginEvent;
 import com.vaadin.ui.Table;
-import java.util.Iterator;
-import java.util.Set;
-/** 
+import com.vaadin.ui.Window;
+import java.util.ArrayList;
+
+/**
  *
  * @author weizhe.jiao
- * @version 
+ * @version
  */
-
 public class MyApplication extends Application {
 
     @Override
     public void init() {
-	Window mainWindow = new Window("MyApplication");
-        //Label label = new Label("Hello Vaadin user");
-        Label label = new Label( Integer.toString(SQL.Int("select count(id) from prospecteurs")) );
-        
-        String s=Integer.toString(SQL.Arr("select mail,Pre from prospecteurs").size());
-        System.out.println(s);
-        Label label3 = new Label(s);
+        setTheme("mytheme");
+        Window mainWindow = new Window("MyApplication");
+        Label label = new Label("DirectProscpet");
+        label.setStyleName("titreDirect");
+        mainWindow.addComponent(label);
+        LoginForm login = new LoginForm();
+        login.addStyleName("loginForm");
 
+        login.addListener(new LoginForm.LoginListener() {
 
-        Table t = new Table();
-        ArrayList<HashMap> ah = SQL.Arr("select mail,Pre from prospecteurs");
-        BeanItemContainer<HashMap> container = new BeanItemContainer<HashMap>(HashMap.class);
-        for (HashMap o : ah) {
-            container.addBean(o);
-        }
-        // Create a Set with the keys in the HashMap.
-        Set set = ah.get(1).keySet();
+            @SuppressWarnings("empty-statement")
+            public void onLogin(LoginEvent event) {
+                if (authenticateClient(event.getLoginParameter("username"), event.getLoginParameter("password"))) {
+                    System.out.println("login");
+                }
+            }
+        });
 
-        // Iterate over the Set to see what it contains.
-        Iterator iter = set.iterator();
-        while (iter.hasNext())
-        {
-            Object o = iter.next();
-            System.out.println("keySet: " + o.toString());
-            
-        }
-        Object[] array = set.toArray(); 
+        mainWindow.addComponent(login);
         
-        t.setContainerDataSource(container);
-        t.setVisibleColumns(array);
-        
-        
-        mainWindow.addComponent(label3);
-        mainWindow.addComponent(t);
-        
-	//mainWindow.addComponent(label);
-	setMainWindow(mainWindow);
+        setMainWindow(mainWindow);
     }
 
+    private Boolean authenticateClient(String name, String pass) {
+        StringBuilder queryBuilder = new StringBuilder(); 
+        queryBuilder.append("SELECT  id,mail,nom,pass FROM Prospecteurs  "); 
 
+        queryBuilder.append(" where mail = '");
+        queryBuilder.append(name);
+        queryBuilder.append("' and pass= '"); 
+        queryBuilder.append(pass); 
+        queryBuilder.append("'"); 
 
+        ArrayList al=SQL.Arr(queryBuilder.toString());
+        if (al.size()>0)
+            return true;
+
+        return false;
+    }
 }
